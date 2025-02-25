@@ -1,0 +1,5 @@
+psycopg2==2.9.10
+langchain==0.3.19
+dotenv==0.9.9
+langchain_community==0.3.18
+langchain_experimental==0.3.4
