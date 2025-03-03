@@ -1,0 +1,6 @@
+version: 2.0
+organization: Land
+product: PoC - LLM Chatbot - Studentgruppe fra NMBU V2025
+repo_types: Experiment        
+platforms: []
+visibility: public
