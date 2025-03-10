@@ -23,7 +23,7 @@ def download_data():
     
     print("Henter data fra Fellesbase...")
 
-    conn_string = f"postgresql://{os.getenv('DB_USER_FELLESBASE')}:{os.getenv('DB_PASSWORD_FELLESBASE')}@{os.getenv('DB_HOST_FELLESBASE')}/{os.getenv('DB_NAME_FELLESBASE')}"
+    conn_string = f"postgresql://{os.getenv('DB_USER_FB')}:{os.getenv('DB_PASSWORD_FB')}@{os.getenv('DB_HOST_FB')}/{os.getenv('DB_NAME_FB')}"
     print(conn_string)
     gdf = gpd.read_postgis(query, conn_string)
     
@@ -55,7 +55,7 @@ def create_table():
 def run_script():
     file_name = download_data()  # Steg 1: Last ned data
     if file_name:
-       create_table()  # Steg 2: Opprett tabell i database
+        create_table()  # Steg 2: Opprett tabell i database
        # import_to_db(file_name)  # Steg 3: Importer data til database
 
 # Kjør skriptet
