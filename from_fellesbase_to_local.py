@@ -98,7 +98,7 @@ def download_data():
     
     print("Henter data fra Fellesbase...")
 
-    conn_string = f"postgresql://{os.getenv('DB_USER_FELLESBASE')}:{os.getenv('DB_PASSWORD_FELLESBASE')}@{os.getenv('DB_HOST_FELLESBASE')}/{os.getenv('DB_NAME_FELLESBASE')}"
+    conn_string = f"postgresql://{os.getenv('DB_USER_FELLESBASE')}:{os.getenv('DB_PASSWORD_FELLESBASE')}@{os.getenv('DB_HOST_FELLESBASE')}:{os.getenv('DB_PORT_FELLESBASE')}/{os.getenv('DB_NAME_FELLESBASE')}"
     print(conn_string)
     gdf = gpd.read_postgis(query, conn_string)
     
