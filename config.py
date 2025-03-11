@@ -17,3 +17,4 @@ conn = psycopg2.connect(
 # Using secure file to store the API key for LLM's 
 HF_API_KEY = os.getenv("HF_API_KEY")
 HF_REPO_ID = os.getenv("HF_REPO_ID")
+API_KEY_GROQ = os.getenv("API_KEY_GROQ")

@@ -1,7 +1,8 @@
 from langchain_community.llms import HuggingFaceHub
-from config import HF_API_KEY, HF_REPO_ID
+from config import HF_API_KEY, HF_REPO_ID, API_KEY_GROQ
 from langchain_huggingface import HuggingFaceEndpoint
 from custom_huggingface_endpoint import CustomHuggingFaceEndpoint
+from groq import Groq
 
 # def llm_hf():
 #     return HuggingFaceEndpoint(
@@ -28,13 +29,29 @@ from custom_huggingface_endpoint import CustomHuggingFaceEndpoint
 
 
 # initialize Hub LLM
-llm = CustomHuggingFaceEndpoint(
-    max_new_tokens=250,
-    repo_id=HF_REPO_ID,
-    temperature=0,
-    repetition_penalty=1.03,
-    huggingfacehub_api_token=HF_API_KEY,
+# llm = CustomHuggingFaceEndpoint(
+#     max_new_tokens=250,
+#     repo_id=HF_REPO_ID,
+#     temperature=0,
+#     repetition_penalty=1.03,
+#     huggingfacehub_api_token=HF_API_KEY,
     
-)
+# )
 
-print(llm.invoke("What is Deep Learning?", stop=None, watermark=None, return_full_text=None, stop_sequences=None))
+# print(llm.invoke("What is Deep Learning?", stop=None, watermark=None, return_full_text=None, stop_sequences=None))
+
+
+
+# initialize Groq LLM
+llm = Groq(
+    api_key=API_KEY_GROQ,   
+) 
+
+chat_completion = llm.chat.completions.create(
+    model="llama-3.3-70b-versatile",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant whom translate questions into SQL queries."},
+        {"role": "user", "content": "Hvor mange sykkelveier er det i Oslo?"},
+    ],
+)
+print(chat_completion.choices[0].message.content)

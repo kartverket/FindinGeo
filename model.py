@@ -4,7 +4,7 @@ from langchain.sql_database import SQLDatabase
 from langchain_experimental.sql import SQLDatabaseChain
 import os
 from config import conn
-from llm import llm_hf
+from llm import llm_hf, llm
 
 
 
