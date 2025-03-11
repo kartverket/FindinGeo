@@ -127,7 +127,7 @@ def create_table():
 
 
 def import_to_db(file_name):
-    df = file_name.to_postgis(TABLE_NAME, conn, schema="public")
+    df = file_name.to_postgis(TABLE_NAME, conn)
     print(df.head())
     print(f"✅ Data er importert til tabell '{TABLE_NAME}'.")
 
