@@ -1,4 +1,4 @@
-WITH kommuner AS (
+"""WITH kommuner AS (
                 SELECT
                     k.objid AS kommune_objid, 
                     a.navn AS kommunenavn,
@@ -73,4 +73,4 @@ WITH kommuner AS (
             ON 
                 ST_Intersects(f.geom, k.geom)
             WHERE 
-                k.kommunenavn ILIKE 'Ås'
+                k.kommunenavn ILIKE 'Ås'"""
