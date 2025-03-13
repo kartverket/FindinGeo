@@ -3,6 +3,7 @@ from config import HF_API_KEY, HF_REPO_ID, API_KEY_GROQ
 from langchain_huggingface import HuggingFaceEndpoint
 from custom_huggingface_endpoint import CustomHuggingFaceEndpoint
 from groq import Groq
+from groq_wrapper import GroqLangChainWrapper
 
 # def llm_hf():
 #     return HuggingFaceEndpoint(
@@ -43,15 +44,23 @@ from groq import Groq
 
 
 # initialize Groq LLM
-llm = Groq(
-    api_key=API_KEY_GROQ,   
-) 
 
-chat_completion = llm.chat.completions.create(
-    model="llama-3.3-70b-versatile",
-    messages=[
-        {"role": "system", "content": "You are a helpful assistant whom translate questions into SQL queries."},
-        {"role": "user", "content": "Hvor mange sykkelveier er det i Oslo?"},
-    ],
-)
-print(chat_completion.choices[0].message.content)
+groq_client = Groq(api_key=API_KEY_GROQ)
+llm = GroqLangChainWrapper(groq_client=groq_client, model_name="qwen-2.5-coder-32b")
+
+response = llm._call("Hvordan kom du fram til løsningen fra forrige oppgave og hva var resultatet du fant?")  # Antall turstier i Ås.
+print(response)
+
+
+# llm = Groq(
+#     api_key=API_KEY_GROQ,   
+# ) 
+
+# chat_completion = llm.chat.completions.create(
+#     model="llama-3.3-70b-versatile",
+#     messages=[
+#         {"role": "system", "content": "You are a helpful assistant whom translate questions into SQL queries."},
+#         {"role": "user", "content": "Hvor mange sykkelveier er det i Oslo?"},
+#     ],
+# )
+# print(chat_completion.choices[0].message.content)
