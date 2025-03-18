@@ -48,10 +48,6 @@ def connect_to_db():
     host=os.getenv("DB_HOST_FB")
     port=os.getenv("DB_PORT_FB")
 
-<<<<<<< HEAD
     uri = f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{dbname}"
-=======
-    uri = f"postgresql+psycopg2:{password}@{host}:{port}/{dbname}"
->>>>>>> 776fc49 (prompt)
     connection = SQLDatabase.from_uri(uri)
     return connection
