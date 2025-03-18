@@ -56,23 +56,6 @@ Tools: {tools}
 
 
 
-
-
-# query_prompt = hub.pull("langchain-ai/sql-query-system-prompt", api_key=os.getenv("LANGSMITH_API_KEY"))
-
-# prompt = query_prompt.invoke(
-#     {
-#         "dialect": "postgresql",
-#         "top_k": 2,
-#         "table_info": db.get_table_info(),
-        
-        
-#     }
-# )
-
-
-
-
 load_dotenv()
 st.set_page_config(
     page_title="FindinGeo",
