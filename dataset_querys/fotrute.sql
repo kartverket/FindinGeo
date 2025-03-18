@@ -53,7 +53,6 @@ WITH kommuner AS (
 					f.objid,
 					f.geom,
 					f.objtype,
-					f.senterlinje,
 					f.lokalid,
 					f.navnerom,
 					f.versjonid,
