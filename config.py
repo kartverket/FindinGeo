@@ -3,6 +3,7 @@ import os
 import psycopg2
 from dotenv import load_dotenv
 from langchain_community.utilities import SQLDatabase
+from geoalchemy2 import Geometry
 
 
 load_dotenv()
@@ -51,3 +52,7 @@ def connect_to_db():
     uri = f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{dbname}"
     connection = SQLDatabase.from_uri(uri)
     return connection
+
+connect_to_db()
+
+
