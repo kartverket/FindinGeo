@@ -97,5 +97,17 @@ LIMIT 1;
 
 
 "Finn alle turveier som ligger 20 meter i nærheten av Ås togstasjon"
+"Visualisere med et bufferområde?"
+
+SELECT ST_BUFFER(
+    ST_SetSRID(ST_Point(10.7944517, 59.6632577), 4326),  -- 4326 is the WGS84 projection
+    10000   -- buffer of 20 km in meters.
+);
+
+SELECT * 
+FROM tur_og_friluftsruter.fotrute
+WHERE ST_INTERSECT()
+
+
 
 "Hvilke ruter er beregnet med nøyaktighet på mer enn 200 cm?"
