@@ -15,21 +15,22 @@ WITH kommuner AS (
             -- Samler alle fotruter-segmenter og beregner lengden på senterlinjen
             fotrute AS (
                 SELECT 
-					f.objid AS fotrute_id,
+					f.objid AS objid,
                     ST_Union(f.senterlinje) AS geom,
-					f.objtype AS rutetype,
+					f.objtype AS objtype,
                     ST_Length(ST_Union(f.senterlinje)) AS senterlinje,
-                    f.lokalid AS lokal,
-                    f.navnerom AS navn,
-                    f.versjonid AS versjon,
-                    f.datafangstdato AS datafangstdato_,
-                    f.oppdateringsdato AS oppdateringsdato_,
-                    f.noyaktighet AS noyaktighet_,
-                    f.opphav AS opphav_,
-                    f.omradeid AS omradeid_,
-                    f.informasjon AS informasjon_,
-                    f.rutefolger AS rutefolger_,
-                    f.malemetode AS malemetode_
+                    f.lokalid AS lokalid,
+                    f.navnerom AS navnerom,
+                    f.versjonid AS versjonid,
+                    f.datafangstdato AS datafangstdato,
+                    f.oppdateringsdato AS oppdateringsdato,
+                    f.noyaktighet AS noyaktighet,
+                    f.opphav AS opphav,
+                    f.omradeid AS omradeid,
+                    f.informasjon AS informasjon,
+                    f.rutefolger AS rutefolger,
+                    f.malemetode AS malemetode
+					
                 FROM 
                     tur_og_friluftsruter.fotrute f
                 GROUP BY 
@@ -49,21 +50,21 @@ WITH kommuner AS (
 					
             )
             SELECT 
-					f.fotrute_id,
+					f.objid,
 					f.geom,
-					f.rutetype,
+					f.objtype,
 					f.senterlinje,
-					f.lokal,
-					f.navn,
-					f.versjon,
-					f.datafangstdato_,
-					f.oppdateringsdato_,
-					f.noyaktighet_,
-					f.opphav_,
-					f.omradeid_,
-					f.informasjon_,
-					f.rutefolger_,
-					f.malemetode_
+					f.lokalid,
+					f.navnerom,
+					f.versjonid,
+					f.datafangstdato,
+					f.oppdateringsdato,
+					f.noyaktighet,
+					f.opphav,
+					f.omradeid,
+					f.informasjon,
+					f.rutefolger,
+					f.malemetode
 
 
             FROM 
