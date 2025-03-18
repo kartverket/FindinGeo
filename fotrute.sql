@@ -85,6 +85,8 @@ WHERE noyaktighet < 1;
 
 
 "Hvilke målemetoder er brukt for å kartlegge fotruter i Ås?"
+SELECT DISTINCT(malemetode)
+FROM tur_og_friluftsruter.fotrute_aas;
 
 "I hvilket år ble det registrert flest fotruter?"
 SELECT EXTRACT(YEAR FROM datafangstdato) AS år, COUNT(*) AS antall_registreringer
