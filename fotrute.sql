@@ -59,3 +59,8 @@ LIMIT 50;
 "Hvilke målemetoder er brukt for å kartlegge fotruter i Ås?"
 
 "I hvilket år ble det registrert flest fotruter?"
+
+
+"Finn alle turveier som ligger 20 meter i nærheten av Ås togstasjon"
+
+"Hvilke ruter er beregnet med nøyaktighet på mer enn 200 cm?"
