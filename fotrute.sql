@@ -1,11 +1,14 @@
 "Query-eksempel for fotrute fra FindinGeo databasen"
 
+"Gjøre om geometry kolonnen til koordinater(long, lat)"
+"SELECT ST_AsText(ST_GeomFromWKB(geom)) from public.fotrute_aas;"
+
 "Hvor mange fotruter ble registrert etter 2015?"
-SELECT COUNT(*) from tur_og_friluftsruter.fotrute WHERE year > 2015
+SELECT COUNT(*) from tur_og_friluftsruter.fotrute_aas WHERE year > 2015
 
 "Hvor mange fotruter har belysning på veien i Ås?"
 "Belysning kategorien har verdien [0,1]"
-SELECT COUNT(belysning) from tur_og_friluftsruter.fotrute WHERE belysning = 1;
+SELECT COUNT(belysning) from tur_og_friluftsruter.fotrute_aas WHERE belysning = 1;
 
 
 "Hvor mange grusstier er det i Ås?"
@@ -29,6 +32,10 @@ LIMIT 50;
 
 
 "Hvilken fotrute ligger lengst vest?"
+--Negative longitude are west of the meridian.
+SELECT * 
+
+
 
 
 "Når var siste oppdaterte fotrute?"
@@ -59,8 +66,11 @@ SELECT COUNT(objektid)
 FROM tur_og_friluftsruter.fotrute_aas;
 
 
-
 "Hvor mange kilometer er traktorveg i Ås?"
+SELECT SUM(ST_Length(ST_Transform(senterlinje, 25833)) / 1000) AS total_length
+FROM tur_og_friluftsruter.fotrute_aas
+WHERE
+    rutefolger = "TR"
 
 
 "Hvor mange av fotrutene er frihåndstegning på skjerm?"
@@ -70,7 +80,10 @@ FROM tur_og_friluftsruter.fotrute_aas;
 
 
 "Hvilken type fotrute er det flest av i Ås?"
-
+SELECT COUNT(*) AS fotrute_count
+FROM tur_og_friluftsruter.fotrute_aas
+GROUP BY rutefolger
+LIMIT 1;
 
 
 "Hva er den lengste fotruten i Ås?"
@@ -98,16 +111,18 @@ LIMIT 1;
 
 "Finn alle turveier som ligger 20 meter i nærheten av Ås togstasjon"
 "Visualisere med et bufferområde?"
-
 SELECT ST_BUFFER(
     ST_SetSRID(ST_Point(10.7944517, 59.6632577), 4326),  -- 4326 is the WGS84 projection
     10000   -- buffer of 20 km in meters.
 );
 
 SELECT * 
-FROM tur_og_friluftsruter.fotrute
+FROM tur_og_friluftsruter.fotrute_aas
 WHERE ST_INTERSECT()
 
 
 
 "Hvilke ruter er beregnet med nøyaktighet på mer enn 200 cm?"
+SELECT objid, noyaktighet
+FROM tur_og_friluftsruter.fotrute_aas
+WHERE noyaktighet < 200;
