@@ -15,7 +15,7 @@ WITH kommuner AS (
             -- Samler alle fotruter-segmenter og beregner lengden på senterlinjen
             fotrute AS (
                 SELECT 
-					f.objid AS objid,
+					f.objid AS objid, 
                     ST_Union(f.senterlinje) AS geom,
 					f.objtype AS objtype,
                     ST_Length(ST_Union(f.senterlinje)) AS senterlinje,
@@ -33,6 +33,7 @@ WITH kommuner AS (
 					
                 FROM 
                     tur_og_friluftsruter.fotrute f
+
                 GROUP BY 
 					f.objid,
 					f.objtype,
@@ -75,3 +76,24 @@ WITH kommuner AS (
                 ST_Intersects(f.geom, k.geom)
             WHERE 
                 k.kommunenavn ILIKE 'Ås'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
