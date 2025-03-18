@@ -4,7 +4,9 @@
 "SELECT ST_AsText(ST_GeomFromWKB(geom)) from public.fotrute_aas;"
 
 "Hvor mange fotruter ble registrert etter 2015?"
-SELECT COUNT(*) from fotrute_aas WHERE year > 2015
+SELECT COUNT(*), EXTRACT(YEAR FROM datafangstdato) AS år 
+FROM fotrute_aas 
+WHERE år > 2015;
 
 "Hvor mange fotruter har belysning på veien i Ås?"
 "Belysning kategorien har verdien [0,1]"
@@ -45,16 +47,15 @@ FROM fotrute_aas;
 
 
 "Hvor mange fotruter i Ås er lengre enn 10 km?"
-SELECT COUNT(senterlinje)
-FROM fotrute_aas
-WHERE ST_senterlinje > 10000;
+SELECT COUNT(ST_Length(ST_Transform(geom, 25833)) > 10000)
+FROM fotrute_aas;
 
 
 
 "Hvor mange kilometer med fotrute er det i Ås?"
-SELECT ST_Transform(senterlinje, 25833) AS senterlinje_km   
+SELECT ST_Transform(geom, 25833) AS senterlinje_km   
 FROM fotrute_aas
-WHERE ST_Length(senterlinje) > 0;
+WHERE ST_Length(geom) > 0;
 
 
 
