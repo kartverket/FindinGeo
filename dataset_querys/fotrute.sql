@@ -18,7 +18,6 @@ WITH kommuner AS (
 					f.objid AS objid, 
                     ST_Union(f.senterlinje) AS geom,
 					f.objtype AS objtype,
-                    ST_Length(ST_Union(f.senterlinje)) AS senterlinje,
                     f.lokalid AS lokalid,
                     f.navnerom AS navnerom,
                     f.versjonid AS versjonid,
