@@ -16,13 +16,13 @@ load_dotenv()
 # )
 
 # Fellesbasen
-# conn = psycopg2.connect(
-#     dbname=os.getenv("DB_NAME_FB"),
-#     user=os.getenv("DB_USER_FB"),
-#     password=os.getenv("DB_PASSWORD_FB"),
-#     host=os.getenv("DB_HOST_FB"),
-#     port=os.getenv("DB_PORT_FB")
-# )
+conn = psycopg2.connect(
+    dbname=os.getenv("DB_NAME_FB"),
+    user=os.getenv("DB_USER_FB"),
+    password=os.getenv("DB_PASSWORD_FB"),
+    host=os.getenv("DB_HOST_FB"),
+    port=os.getenv("DB_PORT_FB")
+)
 
 # Using secure file to store the API key for LLM's 
 HF_API_KEY = os.getenv("HF_API_KEY")
@@ -48,6 +48,6 @@ def connect_to_db():
     host=os.getenv("DB_HOST_FB")
     port=os.getenv("DB_PORT_FB")
 
-    uri = f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
+    uri = f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{dbname}"
     connection = SQLDatabase.from_uri(uri)
     return connection
