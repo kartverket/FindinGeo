@@ -2,7 +2,7 @@
 import os
 import psycopg2
 from dotenv import load_dotenv
-from langchain.sql_database import SQLDatabase
+from langchain_community.utilities import SQLDatabase
 
 
 load_dotenv()
@@ -42,14 +42,12 @@ API_KEY_GROQ = os.getenv("API_KEY_GROQ")
 #     return connection
 
 def connect_to_db():
-    dbname=os.getenv("DB_NAME_FB"),
-    user=os.getenv("DB_USER_FB"),
-    password=os.getenv("DB_PASSWORD_FB"),
-    host=os.getenv("DB_HOST_FB"),
+    dbname=os.getenv("DB_NAME_FB")
+    user=os.getenv("DB_USER_FB")
+    password=os.getenv("DB_PASSWORD_FB")
+    host=os.getenv("DB_HOST_FB")
     port=os.getenv("DB_PORT_FB")
 
     uri = f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
     connection = SQLDatabase.from_uri(uri)
     return connection
-
-connect_to_db()

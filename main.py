@@ -12,6 +12,13 @@ from config import connect_to_db
 from langchain_groq import ChatGroq
 from dotenv import load_dotenv
 
+
+
+custom_prompt = 
+
+
+
+
 load_dotenv()
 st.set_page_config(
     page_title="FindinGeo",
@@ -76,6 +83,7 @@ def main():
         model="qwen-2.5-coder-32b",
         temperature=0.0,
         max_tokens=512,
+        prompt=custom_prompt
     )
     
     # LangSmith tracer for debugging/monitoring
@@ -89,7 +97,7 @@ def main():
         handle_parsing_errors=True
     )
 
-    user_query = st.text_input("Ask me a question (e.g., 'Vis meg de 5 første radene i tabellen AnadromeLaksefisk_fixed'):")
+    user_query = st.text_input("Ask me a question:")
 
     if st.button("Submit"):
         if user_query.strip():
