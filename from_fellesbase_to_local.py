@@ -19,7 +19,7 @@ with open(SQL_FILE_NAME, 'r', encoding="UTF-8") as file:
 # --- FINDING DATA IN FELLESBASE ---
 def download_data(query):
     print("Retrieving data from Fellesbase...")
-    conn_felles = f"postgresql://{os.getenv('DB_USER_FELLESBASE')}:{os.getenv('DB_PASSWORD_FELLESBASE')}@{os.getenv('DB_HOST_FELLESBASE')}:{os.getenv('DB_PORT_FELLESBASE')}/{os.getenv('DB_NAME_FELLESBASE')}"
+    conn_felles = f"postgresql://{os.getenv('DB_USER_FB')}:{os.getenv('DB_PASSWORD_FB')}@{os.getenv('DB_HOST_FB')}:{os.getenv('DB_PORT_FB')}/{os.getenv('DB_NAME_FB')}"
     gdf = gpd.read_postgis(query, conn_felles)
     print(f"✅ Data successfully loaded from Fellesbase.")
     return gdf

@@ -48,7 +48,7 @@ from groq_wrapper import GroqLangChainWrapper
 groq_client = Groq(api_key=API_KEY_GROQ)
 llm = GroqLangChainWrapper(groq_client=groq_client, model_name="qwen-2.5-coder-32b")
 
-response = llm._call("Hvordan kom du fram til løsningen fra forrige oppgave og hva var resultatet du fant?")  # Antall turstier i Ås.
+response = llm._call("Antall turstier i ÅS?")  # Antall turstier i Ås.
 print(response)
 
 
