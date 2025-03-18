@@ -8,15 +8,6 @@ SELECT COUNT(*), EXTRACT(YEAR FROM datafangstdato) AS år
 FROM fotrute_aas 
 WHERE år > 2015;
 
-"Hvor mange fotruter har belysning på veien i Ås?"
-"Belysning kategorien har verdien [0,1]"
-SELECT COUNT(belysning) from fotrute_aas WHERE belysning = 1;
-
-
-"Hvor mange grusstier er det i Ås?"
-SELECT COUNT(underlagstype)
-FROM fotrute_aas
-WHERE underlagstyper = 2;
 
 
 "Kan du hente ut alle fotruter som har blitt målt med flybåren laserskanner i Ås?"
