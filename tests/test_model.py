@@ -1,5 +1,5 @@
 import unittest
-from model import GeoSQLAgent
+from trash.model import GeoSQLAgent
 
 class TestGeoSQLAgent(unittest.TestCase):
     def setUp(self):

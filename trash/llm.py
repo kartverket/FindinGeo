@@ -1,9 +1,9 @@
 from langchain_community.llms import HuggingFaceHub
 from config import HF_API_KEY, HF_REPO_ID, API_KEY_GROQ
 from langchain_huggingface import HuggingFaceEndpoint
-from custom_huggingface_endpoint import CustomHuggingFaceEndpoint
+from trash.custom_huggingface_endpoint import CustomHuggingFaceEndpoint
 from groq import Groq
-from groq_wrapper import GroqLangChainWrapper
+from trash.groq_wrapper import GroqLangChainWrapper
 
 # def llm_hf():
 #     return HuggingFaceEndpoint(
