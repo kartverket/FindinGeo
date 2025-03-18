@@ -6,6 +6,7 @@ from langchain_community.utilities import SQLDatabase
 from geoalchemy2 import Geometry
 
 
+
 load_dotenv()
 # Using secure file to store the connection string
 # conn = psycopg2.connect(

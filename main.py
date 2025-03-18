@@ -12,7 +12,7 @@ from langchain import hub
 from config import connect_to_db
 from langchain_groq import ChatGroq
 from dotenv import load_dotenv
-from langchain_core.prompts.prompt import PromptTemplate
+from langchain_core.prompts.prompt import PromptTemplate, FewShotPromptTemplate
 
 db = connect_to_db()
 
@@ -43,6 +43,20 @@ Tools: {tools}
 {agent_scratchpad}
 """
 )
+
+#https://python.langchain.com/docs/how_to/sql_prompting/
+# example_prompt = PromptTemplate.from_template("User input: {input}\nSQL query: {query}")
+# prompt = FewShotPromptTemplate(
+#     examples=few_shots[:5],
+#     example_prompt=example_prompt,
+#     prefix="You are a SQLite expert. Given an input question, create a syntactically correct SQLite query to run. Unless otherwise specificed, do not return more than {top_k} rows.\n\nHere is the relevant table info: {table_info}\n\nBelow are a number of examples of questions and their corresponding SQL queries.",
+#     suffix="User input: {input}\nSQL query: ",
+#     input_variables=["input", "top_k", "table_info"],
+# )
+
+
+
+
 
 # query_prompt = hub.pull("langchain-ai/sql-query-system-prompt", api_key=os.getenv("LANGSMITH_API_KEY"))
 
