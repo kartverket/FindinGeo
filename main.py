@@ -8,13 +8,35 @@ import folium
 from streamlit_folium import st_folium
 from langchain.callbacks.tracers import LangChainTracer
 from langchain.agents import create_sql_agent, AgentType
+from langchain import hub
 from config import connect_to_db
 from langchain_groq import ChatGroq
 from dotenv import load_dotenv
+from langchain_core.prompts.prompt import PromptTemplate
 
+db = connect_to_db()
 
+custom_prompt = PromptTemplate(
+    input_variables=["input", "tools", "agent_scratchpad", "tool_names"],
+    template="""
+   You are an agent that translate questions into postgresql queries. Output the query and the result of the query.
+   Do not use terms such as 'DELETE', 'UPDATE', 'CREATE', 'INSERT', 'DROP', 'ALTER' and so on.
+   You will recieve a question in either English or Norwegian. You will need to translate the question into a SQL query and output the result of the query.
+    The question is: "{input}". The tools you have at your disposal are: {tools}. The agent scratchpad is: {agent_scratchpad}. The tool names are: {tool_names}.
+    """
+)
 
-custom_prompt = 
+# query_prompt = hub.pull("langchain-ai/sql-query-system-prompt", api_key=os.getenv("LANGSMITH_API_KEY"))
+
+# prompt = query_prompt.invoke(
+#     {
+#         "dialect": "postgresql",
+#         "top_k": 2,
+#         "table_info": db.get_table_info(),
+        
+        
+#     }
+# )
 
 
 
@@ -82,8 +104,7 @@ def main():
         api_key=os.getenv("API_KEY_GROQ"),
         model="qwen-2.5-coder-32b",
         temperature=0.0,
-        max_tokens=512,
-        prompt=custom_prompt
+        max_tokens=512        
     )
     
     # LangSmith tracer for debugging/monitoring
@@ -94,7 +115,8 @@ def main():
         db=db,
         agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
         verbose=True,
-        handle_parsing_errors=True
+        handle_parsing_errors=True,
+        prompt=custom_prompt
     )
 
     user_query = st.text_input("Ask me a question:")
