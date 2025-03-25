@@ -12,7 +12,7 @@ from langchain import hub
 from config import connect_to_db
 from langchain_groq import ChatGroq
 from dotenv import load_dotenv
-from langchain_core.prompts.prompt import PromptTemplate, FewShotPromptTemplate
+from langchain_core.prompts.prompt import PromptTemplate #, FewShotPromptTemplate
 
 db = connect_to_db()
 
