@@ -7,8 +7,8 @@ load_dotenv()
 
 
 # --- CONFIGURATION SETTINGS ---
-SQL_FILE_NAME = "dataset_querys/fotrute.sql" # SQL file with a query to execute
-TABLE_NAME = "fotrute_aas"
+SQL_FILE_NAME = "dataset_querys/malemetode.sql" # SQL file with a query to execute
+TABLE_NAME = "fotrute_ass_malemetode"
 SCHEMA = "public" # if None, default is public
 
 
