@@ -11,11 +11,11 @@ WHERE EXTRACT(YEAR FROM datafangstdato) > 2015
 GROUP BY EXTRACT(YEAR FROM datafangstdato);
 
 
-"Kan du hente ut alle fotruter som har blitt målt med flybåren laserskanner i Ås?" Sjekk igjen!!
+"Kan du hente ut alle fotruter som har blitt målt med stereoinstrument i Ås?" 
 "Hente ut objektid som tilhører samme målemetode"
 SELECT objtype, malemetode 
 FROM fotrute_aas
-WHERE malemetode = 36;
+WHERE malemetode = '20';
 
 
 "Kan du hente ut de 50 første registrerte fotrutene?"
@@ -108,16 +108,16 @@ ORDER BY antall_registreringer DESC
 LIMIT 1;
 
 
-"Finn alle turveier som ligger 20 meter i nærheten av Ås togstasjon"
+"Finn alle turveier som ligger 2 km i nærheten av Ås togstasjon"
 "Visualisere med et bufferområde?"
-SELECT ST_BUFFER(
-    ST_SetSRID(ST_Point(10.7944517, 59.6632577), 4326),  -- 4326 is the WGS84 projection
-    10000   -- buffer of 20 km in meters.
-);
-
-SELECT * 
-FROM fotrute_aas
-WHERE ST_INTERSECT()
+"Denne funker ikke!!"
+SELECT ST_AsText(ST_GeomFromWKB(geom)) from public.fotrute_aas;
+SELECT * from geom 
+FROM public.fotrute_aas
+WHERE ST_distance(
+    ST_Transform(ST_SetRID(ST_MakePoint(263148.72, 6621417.34), 4258), 3857), 
+    ST_Transform(geometry, 3857)
+) <= 2000;
 
 
 
@@ -130,8 +130,12 @@ WHERE noyaktighet < 200;
 
 examples_fotrute = [
     {   "input": "Hvor mange fotruter ble registrert etter 2015?", 
-        "query": "SELECT COUNT(*), EXTRACT(YEAR FROM datafangstdato) FROM fotrute_aas WHERE EXTRACT(YEAR FROM datafangstdato) > 2015 GROUP BY EXTRACT(YEAR FROM datafangstdato);"},
-    {
+        "query": "SELECT COUNT(*), EXTRACT(YEAR FROM datafangstdato) FROM fotrute_aas WHERE EXTRACT(YEAR FROM datafangstdato) > 2015 GROUP BY EXTRACT(YEAR FROM datafangstdato);",
+    },
+    {   "input": "Kan du hente ut alle fotruter som har blitt målt med stereoinstrument i Ås?", 
+        "query": "SELECT objtype, malemetode  FROM fotrute_aas WHERE malemetode = '20';",
+    },
+    {,
         "input": "Kan du hente ut de 50 første registrerte fotrutene?",
         "query": "SELECT objtype, datafangstdato FROM fotrute_aas ORDER BY datafangstdato ASC LIMIT 50;",
     },
