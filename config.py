@@ -44,16 +44,18 @@ API_KEY_GROQ = os.getenv("API_KEY_GROQ")
 #     return connection
 
 def connect_to_db():
-    dbname=os.getenv("DB_NAME_FB")
-    user=os.getenv("DB_USER_FB")
-    password=os.getenv("DB_PASSWORD_FB")
-    host=os.getenv("DB_HOST_FB")
-    port=os.getenv("DB_PORT_FB")
+    dbname=os.getenv("DB_NAME")
+    user=os.getenv("DB_USER")
+    password=os.getenv("DB_PASSWORD")
+    host=os.getenv("DB_HOST")
+    port=os.getenv("DB_PORT")
 
     uri = f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{dbname}"
     connection = SQLDatabase.from_uri(uri)
     return connection
 
 connect_to_db()
+
+DATABASE_URI = f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
 
 
