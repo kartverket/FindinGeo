@@ -101,6 +101,10 @@ GROUP BY v.description
 ORDER BY antall_veier DESC;
 
 
+"Finn veier som er ved siden av hverandre"
+SELECT vegkategori = 'P', ST_AsText(ST_Buffer(location, 50)) AS road_buffer
+FROM forenklet_elveg_aas;
+
 
 examples_elveg = [
     {   "input": "Kan du hente ut alle veier som har blitt målt med stereoinstrument i Ås?", 
