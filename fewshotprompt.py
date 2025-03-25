@@ -94,9 +94,10 @@ Question: the input question you must answer
 Thought: you should think about what to do
 Action: the action to take, should be one of [sql_db_query, sql_db_schema, sql_db_list_tables, sql_db_query_checker]
 Action Input: the input to the action
-Observation: the result of the action.  
+Observation: the result of the action. Specifically the output from the query.   
+Process: Repeat Thought/Action/Action Input/Observation once.
 
-Thought: I now know the final answer. Let's return it.
+Thought: I now know the final answer. Let's return it in a form of the query output.
 Final Answer: the final answer to the original input question
 """
 
