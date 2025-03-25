@@ -38,10 +38,10 @@ FROM fotrute_aas;
 
 
 "Hvor mange fotruter i Ås er lengre enn 10 km?"
-"Svar: "2024-12-02 15:44:44""
-
-SELECT COUNT(ST_Length(ST_Transform(geom, 25833)) > 10000)
-FROM fotrute_aas;
+"Svar: 0"
+SELECT COUNT(*) 
+FROM fotrute_aas 
+WHERE ST_Length(ST_Transform(geom, 25833)) > 10000;
 
 
 
@@ -181,7 +181,7 @@ examples_fotrute = [
     },
     {
         "input": "Hvor mange fotruter i Ås er lengre enn 10 km?",
-        "query": "SELECT COUNT(ST_Length(ST_Transform(geom, 25833)) > 10000) FROM fotrute_aas;",
+        "query": "SELECT COUNT(*) FROM fotrute_aas WHERE ST_Length(ST_Transform(geom, 25833)) > 10000;",
     },        
     {
         "input": "Hvilken type fotrute er det flest av i Ås?",
