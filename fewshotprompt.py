@@ -3,31 +3,69 @@ from langchain_core.prompts.few_shot import FewShotPromptTemplate
 
 
 # Few-shot prompt for SQL queries
-few_shots = [
+examples_fotrute = [
+    {   "input": "Hvor mange fotruter ble registrert etter 2015?", 
+        "query": "SELECT COUNT(*), EXTRACT(YEAR FROM datafangstdato) FROM fotrute_aas WHERE EXTRACT(YEAR FROM datafangstdato) > 2015 GROUP BY EXTRACT(YEAR FROM datafangstdato);"},
     {
-        "input": "What is the total number of rows in the table?",
-        "query": "SELECT COUNT(*) FROM table_name;"
+        "input": "Kan du hente ut de 50 første registrerte fotrutene?",
+        "query": "SELECT objtype, datafangstdato FROM fotrute_aas ORDER BY datafangstdato ASC LIMIT 50;",
     },
     {
-        "input": "What is the average value of the column 'column_name'?",
-        "query": "SELECT AVG(column_name) FROM table_name;"
+        "input": "Hvilke ruter er beregnet med nøyaktighet på mer enn 200 cm?",
+        "query": "SELECT objid, noyaktighet FROM fotrute_aas WHERE noyaktighet < 200;",
     },
     {
-        "input": "What is the maximum value of the column 'column_name'?",
-        "query": "SELECT MAX(column_name) FROM table_name;"
+        "input": "Find the total duration of all tracks.",
+        "query": "SELECT SUM(Milliseconds) FROM Track;",
     },
     {
-        "input": "What is the minimum value of the column 'column_name'?",
-        "query": "SELECT MIN(column_name) FROM table_name;"
+        "input": "Hvilke målemetoder er brukt for å kartlegge fotruter i Ås?",
+        "query": "SELECT DISTINCT(malemetode) FROM fotrute_aas;",
     },
     {
-        "input": "What is the sum of the column 'column_name'?",
-        "query": "SELECT SUM(column_name) FROM table_name;"
-    }
+        "input": "Hvilke fotruter er kartlagt med en nøyaktighet på under 1 meter?",
+        "query": "SELECT objektid, noyaktighet FROM fotrute_aas WHERE noyaktighet < 1;",
+    },
+    {
+        "input": "Hvor mange fotruter er det i Ås?",
+        "query": "SELECT COUNT(objid) FROM fotrute_aas;",
+    },
+    {
+        "input": "Når var siste oppdaterte fotrute?",
+        "query": "SELECT MAX(oppdateringsdato)  FROM fotrute_aas;",
+    },
+    {
+        "input": "Hva er den lengste fotruten i Ås?",
+        "query": "SELECT MAX(senterlinje) FROM fotrute_aas;",
+    },
+    {
+        "input": "Hvor mange kilometer med fotrute er det i Ås?",
+        "query": "SELECT SUM(ST_Length(ST_Transform(geom, 25833))) AS senterlinje_km FROM fotrute_aas WHERE ST_Length(geom) > 0;",
+    },
+    {
+        "input": "Hvor mange kilometer er traktorveg i Ås?",
+        "query": "SELECT SUM(ST_Length(ST_Transform(geom, 25833))) AS senterlinje_km FROM fotrute_aasWHERE rutefolger like 'TR%'",
+    },
+    {
+        "input": "Hvilken fotrute ligger lengst vest i Ås?",
+        "query": "SELECT *, ST_XMin(geom) AS min_lengdegrad FROM fotrute_aas ORDER BY min_lengdegrad ASC LIMIT 1;",
+    },
+    {
+        "input": "Hvor mange fotruter i Ås er lengre enn 10 km?",
+        "query": "SELECT COUNT(ST_Length(ST_Transform(geom, 25833)) > 10000) FROM fotrute_aas;",
+    },        
+    {
+        "input": "Hvilken type fotrute er det flest av i Ås?",
+        "query": "SELECT COUNT(*) AS fotrute_count FROM fotrute_aas GROUP BY rutefolger LIMIT 1;",
+    },      
+    {
+        "input": "I hvilket år ble det registrert flest fotruter?",
+        "query": "SELECT EXTRACT(YEAR FROM datafangstdato) AS år, COUNT(*) AS antall_registreringer FROM fotrute_aas GROUP BY år ORDER BY antall_registreringer DESC LIMIT 1;",
+    }        
 ]
 
 prefix="""
-You are an agent designed to interact with a SQL database.
+You are an agent designed to interact with a SQL database. You might be asked in both English and Norwegian.    
 Given an input question, create a syntactically correct postgresql query to run, then look at the results of the query and return the answer.
 Unless the user explicitly requests more than 10 results, always limit your query to at most 10 rows.
 You can order the results by a relevant column to return the most interesting examples in the database.
@@ -65,7 +103,7 @@ Begin!
 #https://python.langchain.com/docs/how_to/sql_prompting/
 example_prompt = PromptTemplate.from_template("User input: {input}\nSQL query: {query}")
 few_shot_prompt = FewShotPromptTemplate(
-    examples=few_shots,
+    examples=examples_fotrute,
     example_prompt=example_prompt,
     prefix=prefix,
     suffix="User input: {input}\nSQL query: ",
