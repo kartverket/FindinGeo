@@ -165,8 +165,6 @@ Result: answer to the user's question based on the query results.
 """
 
 
-
-
 suffix = """
 User input: {input}
 {agent_scratchpad}

@@ -10,7 +10,6 @@ from dotenv import load_dotenv
 from interface import handle_agent_interaction
 from fewshotprompt import few_shot_prompt
 from tools import ALL_TOOLS
-from langchain_core.prompts.prompt import PromptTemplate
 
 
 load_dotenv()
@@ -22,7 +21,7 @@ def main():
     db = connect_to_db()
     llm = ChatGroq(
         api_key=os.getenv("API_KEY_GROQ"),
-        model="qwen-2.5-coder-32b",
+        model="gemma2-9b-it",
         temperature=0.0,
         max_tokens=512       
     )
