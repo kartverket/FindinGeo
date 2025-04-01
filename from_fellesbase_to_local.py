@@ -2,7 +2,6 @@ import os
 import pandas as pd
 import geopandas as gpd
 from sqlalchemy import create_engine
-from config import conn
 from dotenv import load_dotenv
 load_dotenv()
 

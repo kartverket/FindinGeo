@@ -4,8 +4,10 @@ from langchain_core.prompts.few_shot import FewShotPromptTemplate
 
 # Few-shot prompt for SQL queries
 examples_fewshot = [
-    {   "input": "Hvor mange fotruter ble registrert etter 2015?", 
-        "query": "SELECT COUNT(*), EXTRACT(YEAR FROM datafangstdato) FROM fotrute_aas WHERE EXTRACT(YEAR FROM datafangstdato) > 2015 GROUP BY EXTRACT(YEAR FROM datafangstdato);"},
+    {   
+        "input": "Hvor mange fotruter ble registrert etter 2015?", 
+        "query": "SELECT COUNT(*), EXTRACT(YEAR FROM datafangstdato) FROM fotrute_aas WHERE EXTRACT(YEAR FROM datafangstdato) > 2015 GROUP BY EXTRACT(YEAR FROM datafangstdato);"
+    },
     {
         "input": "Kan du hente ut de 50 første registrerte fotrutene?",
         "query": "SELECT objtype, datafangstdato FROM fotrute_aas ORDER BY datafangstdato ASC LIMIT 50;",
@@ -62,10 +64,11 @@ examples_fewshot = [
         "input": "I hvilket år ble det registrert flest fotruter?",
         "query": "SELECT EXTRACT(YEAR FROM datafangstdato) AS år, COUNT(*) AS antall_registreringer FROM fotrute_aas GROUP BY år ORDER BY antall_registreringer DESC LIMIT 1;",
     },
-     {   "input": "Kan du hente ut alle veier som har blitt målt med stereoinstrument i Ås?", 
+    {   "input": "Kan du hente ut alle veier som har blitt målt med stereoinstrument i Ås?", 
         "query": "SELECT objid, datafangstdato, malemetode FROM forenklet_elveg_aas ORDER BY datafangstdato ASC LIMIT 50;",
     },
-    {   "input": "Hvor mange veier ble registrert i 2023?", 
+    {   
+        "input": "Hvor mange veier ble registrert i 2023?", 
         "query": "SELECT EXTRACT(YEAR FROM datafangstdato) AS år, COUNT(*) AS antall_registreringer FROM forenklet_elveg_aas WHERE år = 2023 GROUP BY år ORDER BY antall_registreringer DESC;",
     },
     {
