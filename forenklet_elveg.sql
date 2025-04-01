@@ -2,9 +2,10 @@
 
 "Hvor mange bilveier er det i Ås?"
 "Fasit: 4555"
-SELECT COUNT(typeveg)
+SELECT objid, geom, COUNT(typeveg)
 FROM forenklet_elveg_aas
-WHERE typeveg = 'enkelBilveg';
+WHERE typeveg = 'enkelBilveg'
+GROUP BY objid, geom
 
 
 
@@ -22,7 +23,7 @@ WHERE malemetode = 'stereoinstrument';
 
 
 "Kan du hente ut de 50 første registrerte veiene og deres målemetode?"
-SELECT objid, datafangstdato, malemetode
+SELECT objid, geom, datafangstdato, malemetode
 FROM forenklet_elveg_aas
 ORDER BY datafangstdato ASC
 LIMIT 50;
@@ -30,21 +31,22 @@ LIMIT 50;
 
 "Hvor mange veier er det i Brekkeskog?"
 "Fasit: 16"
-SELECT COUNT(*)
+SELECT objid, geom, COUNT(*)
 FROM forenklet_elveg_aas
-WHERE adressenavn LIKE '%Brekkeskog%';
+WHERE adressenavn LIKE '%Brekkeskog%'
+GROUP BY objid, geom;
 
 
 "Hvor mange veier ble registrert i 2023?"
 "Fasit: 1"
-SELECT EXTRACT(YEAR FROM datafangstdato) AS år, COUNT(*) AS antall_registreringer
+SELECT objid, geom, EXTRACT(YEAR FROM datafangstdato) AS aar, COUNT(*) AS antall_registreringer
 FROM forenklet_elveg_aas
-WHERE år = 2023
-GROUP BY år
-ORDER BY antall_registreringer DESC;
+WHERE EXTRACT(YEAR FROM datafangstdato) = 2023
+GROUP BY objid, geom, aar;
 
 
 "Hvor mye varierer målingene i nøyaktighet?"
+"Svar: Fra 0.2 meter til 500 meter."
 SELECT MAX(noyaktighet), MIN(noyaktighet)
 FROM forenklet_elveg_aas
 
@@ -77,6 +79,13 @@ FROM forenklet_elveg_aas
 WHERE typeveg = 'gangveg';
 
 
+"Hvor lang er den lengste veien i Ås?"
+SELECT objid, typeveg, ST_Length(ST_Transform(geom, 25833))/1000 AS senterlinje_km 
+FROM forenklet_elveg_aas 
+ORDER BY senterlinje_km DESC 
+LIMIT 1;
+
+
 "Hvilket år ble flest veier registrert, og hvor mange var det?"
 "Fasit: 2018, 2209"
 SELECT EXTRACT(YEAR FROM datafangstdato) AS år, COUNT(*) AS antall
@@ -101,17 +110,19 @@ GROUP BY v.description
 ORDER BY antall_veier DESC;
 
 
-"Finn veier som er ved siden av hverandre"
-SELECT vegkategori = 'P', ST_AsText(ST_Buffer(location, 50)) AS road_buffer
+"Finn alle skogsveier som er 100 m i nærheten av Audmax"
+"Funker ikke"
+SELECT objid, geom, vegkategori
 FROM forenklet_elveg_aas;
+WHERE ST_WITHIN(geom, ST_SetSRID(ST_MakePoint(6621631.05, 262203.05), 4326), 100);  -- point with your coordinates, in SRID 4326 (WGS 84)
 
 
 examples_elveg = [
     {   "input": "Kan du hente ut alle veier som har blitt målt med stereoinstrument i Ås?", 
-        "query": "SELECT objid, datafangstdato, malemetode FROM forenklet_elveg_aas ORDER BY datafangstdato ASC LIMIT 50;",
+        "query": "SELECT objid, geom, datafangstdato, malemetode FROM forenklet_elveg_aas ORDER BY datafangstdato ASC LIMIT 50;",
     },
     {   "input": "Hvor mange veier ble registrert i 2023?", 
-        "query": "SELECT EXTRACT(YEAR FROM datafangstdato) AS år, COUNT(*) AS antall_registreringer FROM forenklet_elveg_aas WHERE år = 2023 GROUP BY år ORDER BY antall_registreringer DESC;",
+        "query": "SELECT objid, geom, EXTRACT(YEAR FROM datafangstdato) AS aar, COUNT(*) AS antall_registreringer FROM forenklet_elveg_aas WHERE EXTRACT(YEAR FROM datafangstdato) = 2023 GROUP BY objid, geom, aar;",
     },
     {,
         "input": "Hvor mange riksveier er det i Ås?",
@@ -127,15 +138,15 @@ examples_elveg = [
     },
     {
         "input": "Hvor mange veier er det i Brekkeskog?",
-        "query": "SELECT COUNT(*) FROM forenklet_elveg_aas WHERE adressenavn LIKE '%Brekkeskog%';"
+        "query": "SELECT objid, geom, COUNT(*) FROM forenklet_elveg_aas WHERE adressenavn LIKE '%Brekkeskog%' GROUP BY objid, geom;",
     },
     {
         "input": "Kan du hente ut de 50 første registrerte veiene og deres målemetode?",
-        "query": "SELECT objid, datafangstdato, malemetode FROM forenklet_elveg_aas ORDER BY datafangstdato ASC LIMIT 50;",
+        "query": "SELECT objid, geom, datafangstdato, malemetode FROM forenklet_elveg_aas ORDER BY datafangstdato ASC LIMIT 50;",
     },
     {
         "input": "Hvor mange bilveier er det i Ås?",
-        "query": "SELECT COUNT(typeveg) FROM forenklet_elveg_aas WHERE typeveg = 'enkelBilveg';",
+        "query": "SELECT objid, geom, COUNT(typeveg) FROM forenklet_elveg_aas WHERE typeveg = 'enkelBilveg' GROUP BY objid, geom",
     },
     {
         "input": "Hvor mye varierer målingene i nøyaktighet?",
@@ -162,8 +173,8 @@ examples_elveg = [
         "query": "SELECT v.description AS vegkategori_beskrivelse, COUNT(*) AS antall_veier FROM forenklet_elveg_aas e JOIN forenklet_elveg_aas_vegkategori v ON e.vegkategori = v.identifier GROUP BY v.description ORDER BY antall_veier DESC;",
     },        
     {
-        "input": "",
-        "query": "",
+        "input": "Hvor lang er den lengste veien i Ås?",
+        "query": "SELECT objid, typeveg, ST_Length(ST_Transform(geom, 25833))/1000 AS senterlinje_km FROM forenklet_elveg_aas ORDER BY senterlinje_km DESC LIMIT 1;",
     },      
     {
         "input": "",
