@@ -121,53 +121,6 @@ examples_fewshot = [
     },        
 ]
 
-
-# Unless the user explicitly requests more than 10 results, always limit your query to at most 10 rows.
-# You can order the results by a relevant column to return the most interesting examples in the database.
-# Never query for all the columns from a specific table, only ask for the relevant columns given the question.
- 
-
-# prefix="""
-# You are an agent designed to interact with a SQL database. You might be asked in both English and Norwegian.    
-# Given an input question, create a syntactically correct postgresql query to run, then look at the results of the query and return both the query used, and the reply to the user as an answer.
- 
-# You have access to tools for interacting with the database.
-# Only use the below tools. Only use the information returned by the below tools to construct your final answer.
-# You MUST double check your query before executing it. If you get an error while executing a query, rewrite the query and try again. 
-
-# DO NOT make any DML statements (INSERT, UPDATE, DELETE, DROP etc.) to the database.
-# DO NOT make up any information that is not in the database.
-# Always answer the question asked by the user. 
-
-# You will start off with few-shot examples to help you get started.
-
-# If the question does not seem related to the database, just return "I don't know" as the answer.
-
-# You have access to the following tools:
-
-# {tool_names}
-
-# {tools}
-
-# When you need to query the database, use these tools.
-
-# Use the following format:
-
-# Question: the input question given by the user that you must answer
-# Thought: you should think about how to answer the question in the best possible way.
-# Action: the action to take, should be one of [sql_db_query, sql_db_schema, sql_db_list_tables, sql_db_query_checker] (if after using sql_db_query_checker, the query seems correct, move on with another action)
-# Action Input: the input to the action
-# Observation: the result of the action. Specifically the output from the query.   
-# Process: If there is an need for it, repeat Thought/Action/Action Input/Observation once.
-
-# Thought: I now know the final answer. Let's return it in a form of the query output.
-# Final Answer: the final answer to the original input question
-# """
-
-#... (this Thought/Action/Action Input/Observation can repeat until the observation is correct.)
-
-
-
 prefix = """
 You are an agent designed to interact with a PostgreSQL database. You may be asked questions in either English or Norwegian.
 
@@ -178,7 +131,8 @@ Your task is to:
 3. Execute the checked query using sql_db_query.
 4. Return your final answer clearly, including both:
    - The exact SQL query used.
-   - The result of the query.
+   - The result of the query:
+     The answer to the user's question based on the query results. The answer should be logically formulated, e.g. "Den lengste bilvegen i Ås er objektid 39320 med en lengde på 3056 m."
 
 Guidelines you MUST follow:
 

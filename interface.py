@@ -60,8 +60,10 @@ def handle_agent_interaction(agent, user_query, tracer):
     
     try:
         # Create a placeholder for the terminal-like output
+        terminal_placeholder = st.empty()
+       
         with agent_output_container:
-            terminal_placeholder = st.empty()
+            
             
             if 'original_stdout' not in st.session_state:
                 st.session_state.original_stdout = sys.stdout
@@ -131,7 +133,7 @@ def handle_agent_interaction(agent, user_query, tracer):
                     st.error(f"An error occurred: {error_message}")
             finally:
                 sys.stdout = st.session_state.original_stdout
-                
+        terminal_placeholder.empty()    
     except Exception as e:
 
         sys.stdout = st.session_state.original_stdout
