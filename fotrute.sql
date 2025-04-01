@@ -25,10 +25,19 @@ ORDER BY datafangstdato ASC
 LIMIT 50;
 
 "Hvilken fotrute ligger lengst vest i Ås?"
+"Svar: objid = 33290"
 --Negative longitude are west of the meridian.
 SELECT *, ST_XMin(geom) AS min_lengdegrad
 FROM fotrute_aas
 ORDER BY min_lengdegrad ASC
+LIMIT 1;
+
+
+"Hvilken fotrute ligger lengst øst i Ås?"
+"Svar: objid = 101395"
+SELECT *, ST_XMax(geom) AS maks_lengdegrad
+FROM fotrute_aas
+ORDER BY maks_lengdegrad DESC
 LIMIT 1;
 
 
@@ -89,7 +98,7 @@ LIMIT 1;
 
 "Hva er den lengste fotruten i Ås?"
 "Svar: BV, bilvei på 3.05 km"
-SELECT rutefolger, geom, ST_Length(ST_Transform(geom, 25833))/1000 AS senterlinje_km  
+SELECT objid, rutefolger, geom, ST_Length(ST_Transform(geom, 25833))/1000 AS senterlinje_km  
 FROM fotrute_aas
 ORDER BY rutefolger, senterlinje_km DESC
 LIMIT 1;
@@ -167,7 +176,7 @@ examples_fotrute = [
     },
     {
         "input": "Hva er den lengste fotruten i Ås?",
-        "query": "SELECT rutefolger, geom, ST_Length(ST_Transform(geom, 25833))/1000 AS senterlinje_km   FROM fotrute_aas ORDER BY rutefolger, senterlinje_km DESC LIMIT 1;",
+        "query": "SELECT objid, rutefolger, geom, ST_Length(ST_Transform(geom, 25833))/1000 AS senterlinje_km   FROM fotrute_aas ORDER BY rutefolger, senterlinje_km DESC LIMIT 1;",
     },
     {
         "input": "Hvor mange kilometer med fotrute er det i Ås?",
