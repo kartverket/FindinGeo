@@ -91,6 +91,9 @@ def sql_db_query_checker(query: str) -> str:
                 return "Query seems valid."
     except Exception as e:
         return f"Query check failed: {e}"
+    
+def fecht_geodataframe():
+    return 
 
 # Tools for SQL queries
 sql_db_query = Tool(
@@ -117,9 +120,16 @@ sql_db_query_checker = Tool(
     description="Use this tool to double check if your query is correct before executing it. Always use this tool before executing a query with sql_db_query!"
 )
 
+fecht_geodataframe = Tool(
+    name="plot_in_map",
+    func=fecht_geodataframe,
+    description="Use this tool to plot data in a map. Input is a GeoDataFrame with geometry column, output is a map."
+)
+
 ALL_TOOLS = [
     sql_db_query, 
     sql_db_schema, 
     sql_db_list_tables, 
     sql_db_query_checker,
+    fecht_geodataframe
     ]

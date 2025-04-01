@@ -3,7 +3,7 @@ from langchain_core.prompts.few_shot import FewShotPromptTemplate
 
 
 # Few-shot prompt for SQL queries
-examples_fotrute = [
+examples_fewshot = [
     {   "input": "Hvor mange fotruter ble registrert etter 2015?", 
         "query": "SELECT COUNT(*), EXTRACT(YEAR FROM datafangstdato) FROM fotrute_aas WHERE EXTRACT(YEAR FROM datafangstdato) > 2015 GROUP BY EXTRACT(YEAR FROM datafangstdato);"},
     {
@@ -118,12 +118,20 @@ examples_fotrute = [
     },        
 ]
 
+
+# Unless the user explicitly requests more than 10 results, always limit your query to at most 10 rows.
+# You can order the results by a relevant column to return the most interesting examples in the database.
+# Never query for all the columns from a specific table, only ask for the relevant columns given the question.
+ 
+
 prefix="""
 You are an agent designed to interact with a SQL database. You might be asked in both English and Norwegian.    
 Given an input question, create a syntactically correct postgresql query to run, then look at the results of the query and return the answer.
-Unless the user explicitly requests more than 10 results, always limit your query to at most 10 rows.
-You can order the results by a relevant column to return the most interesting examples in the database.
-Never query for all the columns from a specific table, only ask for the relevant columns given the question.
+Behinde the scenes, return the geodataframe with the query results as long as one of the columns is a geometry type. 
+Only return the dataframe if one of the columns is a geometry type.
+Only return rows that are relevant to the question together with the geometry type column.
+
+ 
 You have access to tools for interacting with the database.
 Only use the below tools. Only use the information returned by the below tools to construct your final answer.
 You MUST double check your query before executing it. If you get an error while executing a query, rewrite the query and try again. 
@@ -146,7 +154,7 @@ Use the following format:
 
 Question: the input question you must answer
 Thought: you should think about what to do
-Action: the action to take, should be one of [sql_db_query, sql_db_schema, sql_db_list_tables, sql_db_query_checker]
+Action: the action to take, should be one of [sql_db_query, sql_db_schema, sql_db_list_tables, sql_db_query_checker] (if after using sql_db_query_checker, the query seems correct, move on with another action)
 Action Input: the input to the action
 Observation: the result of the action. Specifically the output from the query.   
 Process: Repeat Thought/Action/Action Input/Observation once.
@@ -169,17 +177,11 @@ User input: {input}
 #https://python.langchain.com/docs/how_to/sql_prompting/
 example_prompt = PromptTemplate.from_template("User input: {input}\nSQL query: {query}")
 few_shot_prompt = FewShotPromptTemplate(
-    examples=examples_fotrute,
+    examples=examples_fewshot,
     example_prompt=example_prompt,
     prefix=prefix,
     suffix=suffix,
     input_variables=["input"]
 )
 
-if __name__ == "__main__":
-    render_prompt = few_shot_prompt.format(
-        input="What is the total number of rows in the table?",
-        top_k=5,
-        table_info="table_name"
-    )
-    print(render_prompt)
+
