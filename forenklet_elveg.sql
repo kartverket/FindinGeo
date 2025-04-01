@@ -80,6 +80,7 @@ WHERE typeveg = 'gangveg';
 
 
 "Hvor lang er den lengste veien i Ås?"
+"Svar: objid =  910743, enkelbilveg, lengde = 3.3 km"
 SELECT objid, typeveg, ST_Length(ST_Transform(geom, 25833))/1000 AS senterlinje_km 
 FROM forenklet_elveg_aas 
 ORDER BY senterlinje_km DESC 
@@ -100,6 +101,13 @@ SELECT objid, adressenavn, geom
 FROM forenklet_elveg_aas
 ORDER BY ST_LENGTH(geom) DESC
 LIMIT 3;
+
+"Finn de tre korteste veiene i Ås"
+SELECT objid, adressenavn, geom
+FROM forenklet_elveg_aas
+ORDER BY ST_LENGTH(geom) ASC
+LIMIT 3;
+
 
 "Hvilke vegkategorier finnes i datasettet og hvor mange veier finnes i hver kategori?"
 SELECT v.description AS vegkategori_beskrivelse, COUNT(*) AS antall_veier
