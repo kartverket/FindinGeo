@@ -56,88 +56,82 @@ class StreamlitLogger:
 
 
 def handle_agent_interaction(agent, user_query, tracer):
-    agent_output_container = st.container()
+    # Create a placeholder for the terminal-like output
+    terminal_placeholder = st.empty()
+    
+    # Create a placeholder for results AFTER the terminal
+    results_placeholder = st.container()
     
     try:
-        # Create a placeholder for the terminal-like output
-        terminal_placeholder = st.empty()
-       
-        with agent_output_container:
+        if 'original_stdout' not in st.session_state:
+            st.session_state.original_stdout = sys.stdout
             
+        streamlit_logger = StreamlitLogger(terminal_placeholder, st.session_state.original_stdout)
+        sys.stdout = streamlit_logger
+        st.session_state.needs_reset = True
+        
+        try:
+            raw_result = agent.invoke({"input": user_query}, callbacks=[tracer])
             
-            if 'original_stdout' not in st.session_state:
-                st.session_state.original_stdout = sys.stdout
-                
-            # Reset log buffer on each new query
-            streamlit_logger = StreamlitLogger(terminal_placeholder, st.session_state.original_stdout)
+            # Extract result text from various possible formats
+            result_text = raw_result["output"] if isinstance(raw_result, dict) and "output" in raw_result else str(raw_result)
             
-            sys.stdout = streamlit_logger
-            
-            # Mark that we need to reset on next run
-            st.session_state.needs_reset = True
-            
-            try:
-                raw_result = agent.invoke({"input": user_query}, callbacks=[tracer])
-                
-                # handle different response formats
-                if isinstance(raw_result, dict) and "output" in raw_result:
-                    result_text = raw_result["output"]
-                else:
-                    # Fallback if the output is not in the expected format
-                    result_text = str(raw_result)
-                
-                # Check for timeout/iteration limit messages
+            # Handle various response scenarios
+            with results_placeholder:
                 if "Agent stopped due to iteration limit or time limit" in result_text:
                     st.warning("The query was too complex to process in the allotted time. Try simplifying your question.")
-                # Handle simple "I don't know" responses
                 elif result_text.strip() == "I don't know":
                     st.info("The agent couldn't find an answer to your question. Try rephrasing or asking about something else.")
-                # Check for common error patterns in the result
                 elif "insufficient information" in result_text.lower() or "error" in result_text.lower():
-                    # Extract the error message if possible
-                    if "{\"error\":" in result_text:
-                        error_match = re.search(r'{"error":\s*"([^"]+)"}', result_text)
-                        if error_match:
-                            error_message = error_match.group(1)
-                            st.error(f"Database Error: {error_message}")
-                    # If we couldn't extract a specific error but error keywords are present
-                    elif "Final Answer is not a valid tool" in result_text:
-                        # This indicates the agent is trying to return an error message
-                        error_content = re.search(r'Action Input: (.+?)Final Answer is not a valid tool', result_text, re.DOTALL)
-                        if error_content:
-                            try:
-                                error_json = json.loads(error_content.group(1).strip())
-                                if "error" in error_json:
-                                    st.error(f"Query Error: {error_json['error']}")
-                            except:
+                    # Extract and display error information if present
+                    if "{\"error\":" in result_text and (error_match := re.search(r'{"error":\s*"([^"]+)"}', result_text)):
+                        st.error(f"Database Error: {error_match.group(1)}")
+                    elif "Final Answer is not a valid tool" in result_text and (error_content := re.search(r'Action Input: (.+?)Final Answer is not a valid tool', result_text, re.DOTALL)):
+                        try:
+                            error_json = json.loads(error_content.group(1).strip())
+                            if "error" in error_json:
+                                st.error(f"Query Error: {error_json['error']}")
+                            else:
                                 st.warning("The agent couldn't find the necessary information to answer your question.")
-                        else:
+                        except:
                             st.warning("The agent couldn't complete the query properly.")
                     else:
-                        # Still try to display results for other error cases
                         display_results(result_text)
                 else:
-                    # Only call display_results for proper results
                     display_results(result_text)
-                
-            except Exception as agent_err:
-                # Display a more user-friendly error
-                error_message = str(agent_err)
-                
-                # If it's a parsing error, provide a simplified message
+            
+        except Exception as agent_err:
+            error_message = str(agent_err)
+            
+            with results_placeholder:
+                # Handle parsing errors by extracting the SQL and result
                 if "output parsing error" in error_message.lower():
-                    st.error("The agent encountered difficulty formulating a proper response. Try rephrasing your question to be more specific.")
-                    # Log the full error for debugging
-                    print(f"Original error: {error_message}")
+                    # Try to extract structured content from error message
+                    if match := re.search(r'Could not parse LLM output: `(SQL Query: .+?Result: .+?)`', error_message, re.DOTALL):
+                        full_content = match.group(1)
+                        sql_query_match = re.search(r'SQL Query: (.+?)(?=\nResult:)', full_content, re.DOTALL)
+                        result_match = re.search(r'Result: (.+?)$', full_content, re.DOTALL)
+                        
+                        if sql_query_match and result_match:
+                            st.subheader("Result:")
+                            st.write("**SQL Query:**")
+                            st.code(sql_query_match.group(1).strip(), language="sql")
+                            st.write("**Answer:**")
+                            st.write(result_match.group(1).strip())
+                            return
+                    
+                    # Fallback for parsing errors
+                    st.error("Output parsing error has occurred!")
+                    print(f"{error_message}")
                 else:
-                    st.error(f"An error occurred: {error_message}")
-            finally:
-                sys.stdout = st.session_state.original_stdout
-        terminal_placeholder.empty()    
+                    st.error(f"An error has occurred: {error_message}")
+        finally:
+            sys.stdout = st.session_state.original_stdout
+    
     except Exception as e:
-
         sys.stdout = st.session_state.original_stdout
-        st.error("An unexpected error occurred: " + str(e))
+        with results_placeholder:
+            st.error("An unexpected error occurred: " + str(e))
 
 
 def display_results(raw_result):
