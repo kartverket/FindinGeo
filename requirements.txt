@@ -1,2 +1,6 @@
 psycopg2
 python-dotenv
+geopandas 
+os 
+conn
+dotenv
