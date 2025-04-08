@@ -39,4 +39,4 @@ def connect_to_db():
 
     uri  = f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
     connection = SQLDatabase.from_uri(uri)
-    return connection
+    return connection   
