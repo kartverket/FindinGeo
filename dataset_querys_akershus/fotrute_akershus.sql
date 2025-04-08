@@ -31,7 +31,7 @@ WITH kommuner AS (
                     f.malemetode AS malemetode
 					
                 FROM 
-                    old_tur_og_friluftsruter.fotrute f
+                    tur_og_friluftsruter.fotrute f
 
                 GROUP BY 
 					f.objid,
@@ -64,7 +64,7 @@ WITH kommuner AS (
 					f.informasjon,
 					f.rutefolger,
 					f.malemetode
-                    k.kommunenavn
+                    
 
 
             FROM 
@@ -74,4 +74,24 @@ WITH kommuner AS (
             ON 
                 ST_Intersects(f.geom, k.geom)
             WHERE 
-                k.kommunenavn ILIKE 'Nannestad', 'Lunner', 'Jevnaker', 'Nittedal', 'Bærum', 'Nesodden', 'Asker', 'Frogn', 'Vestby', 'Ås', 'Nordre Follo', 'Aurskog-Høland', 'Enebakk', 'Lørenskog', 'Rælingen', 'Lillestrøm', 'Nes', 'Gjerdrum', 'Ullensaker', 'Eidsvoll', 'Hurdal'
+                k.kommunenavn LIKE 'Nannestad%' 
+                OR k.kommunenavn LIKE 'Lunner%'
+                OR k.kommunenavn LIKE 'Jevnaker%' 
+                OR k.kommunenavn LIKE 'Nittedal%'
+                OR k.kommunenavn LIKE 'Bærum%'
+                OR k.kommunenavn LIKE 'Nesodden%'
+                OR k.kommunenavn LIKE 'Asker%'
+                OR k.kommunenavn LIKE 'Frogn%' 
+                OR k.kommunenavn LIKE 'Vestby%'
+                OR k.kommunenavn LIKE  'Ås%'
+                OR k.kommunenavn LIKE  'Nordre Follo%'
+                OR k.kommunenavn LIKE 'Aurskog-Høland%'
+                OR k.kommunenavn LIKE 'Enebakk%'
+                OR k.kommunenavn LIKE 'Lørenskog%'
+                OR k.kommunenavn LIKE 'Rælingen%'
+                OR k.kommunenavn LIKE 'Lillestrøm%'
+                OR k.kommunenavn LIKE 'Nes%'
+                OR k.kommunenavn LIKE 'Gjerdrum%'
+                OR k.kommunenavn LIKE 'Ullensaker%'
+                OR k.kommunenavn LIKE 'Eidsvoll%'
+                OR k.kommunenavn LIKE 'Hurdal%';
