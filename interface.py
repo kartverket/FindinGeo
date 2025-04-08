@@ -293,7 +293,6 @@ def display_results(raw_result):
     if sql_match:
         sql_query_string = sql_match.group(1).strip()
         
-        # Clean the query from markdown code blocks and other formatting
         sql_query_string = clean_sql_query(sql_query_string)
         
         # Store the SQL query in session state
@@ -446,10 +445,3 @@ def display_map(query_string):
             st.code(traceback.format_exc())
 
         st.session_state.map_displayed = True
-
-# Main application code would go here
-# This typically includes setting up the page, the agent, and UI components
-# Example:
-# if __name__ == "__main__":
-#     st.title("FindinGeo")
-#     # Setup your agent and UI components here
