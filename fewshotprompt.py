@@ -160,7 +160,7 @@ Observation: The output or results of your action.
 
 Thought: Now I have the correct query and results. My query always contains a column with relevant geometry.
 
-Final Answer: (SQL Query: [exact SQL query used]) Nicely formatted answer (with appropriate number of decimal places) to the user's question based on the query results.
+Final Answer: [SQL Query: [exact SQL query used]] Nicely formatted answer (with appropriate number of decimal places) to the user's question based on the query results.
 """
 
 
