@@ -10,13 +10,14 @@ from dotenv import load_dotenv
 from interface import handle_agent_interaction
 from fewshotprompt import few_shot_prompt
 from tools import ALL_TOOLS
-
+from visualize_functions import display_logo_title
 
 load_dotenv()
 
+
 def main():
 
-    st.title("FindinGeo👀")
+    display_logo_title()
 
     db = connect_to_db()
     llm = ChatGroq(
@@ -39,7 +40,7 @@ def main():
         prompt=few_shot_prompt
     )
     
-    # Make sure that the session state is reset at the start of each run (in case of pressing the stop button without refreshing the window)
+    # Reset the session state at the start of each run (in case of pressing the stop button)
     if 'needs_reset' not in st.session_state:
         st.session_state.needs_reset = False
         
