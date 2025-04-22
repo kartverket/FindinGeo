@@ -32,10 +32,6 @@ WITH kommuner AS (
 					
                 FROM 
                     tur_og_friluftsruter.fotrute f
-                
-            SELECT
-                k.kommune_objid
-                k.kommunenavn 
 
                 GROUP BY 
 					f.objid,
@@ -51,25 +47,23 @@ WITH kommuner AS (
                     f.informasjon,
                     f.rutefolger,
                     f.malemetode
-                    k.kommunenavn
-
             )
             SELECT 
-					f.objid,
-					f.geom,
-					f.objtype,
-					f.lokalid,
-					f.navnerom,
-					f.versjonid,
-					f.datafangstdato,
-					f.oppdateringsdato,
-					f.noyaktighet,
-					f.opphav,
-					f.omradeid,
-					f.informasjon,
-					f.rutefolger,
-					f.malemetode
-
+				f.objid,
+				f.geom,
+				f.objtype,
+				f.lokalid,
+				f.navnerom,
+				f.versjonid,
+				f.datafangstdato,
+				f.oppdateringsdato,
+				f.noyaktighet,
+				f.opphav,
+				f.omradeid,
+				f.informasjon,
+				f.rutefolger,
+				f.malemetode,
+                k.kommunenavn 
 
             FROM 
                 fotrute f 
