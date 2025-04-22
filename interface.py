@@ -120,7 +120,7 @@ def clean_sql_query(query_string):
     query_string = re.sub(r'^```sql\s*', '', query_string, flags=re.DOTALL)
     query_string = re.sub(r'\s*```$', '', query_string, flags=re.DOTALL)
     query_string = re.sub(r'`([^`]*)`', r'\1', query_string)
-    # Also strip trailing whitespace and semicolons for cleaner SQL
+
     query_string = query_string.strip()
     if query_string.endswith(';'):
         query_string = query_string[:-1].strip()
@@ -131,7 +131,6 @@ def clean_sql_query(query_string):
 def display_results(raw_result):
     result_text = raw_result.get("output", str(raw_result)) if isinstance(raw_result, dict) else str(raw_result)
 
-    # Variables to hold the parsed results
     narrative_answer = None
     query_for_display_and_map = None # This will hold the determined SQL query
 
@@ -213,7 +212,7 @@ def display_results(raw_result):
     st.write("**Executed SQL Query:**")
     if query_for_display_and_map:
         st.code(query_for_display_and_map, language="sql")
-        st.session_state.last_sql_query = query_for_display_and_map # Store for map logic below
+        st.session_state.last_sql_query = query_for_display_and_map
     else:
         st.info("Could not reliably extract the executed SQL query.")
         st.session_state.last_sql_query = None # Ensure session state is None
@@ -228,7 +227,7 @@ def display_results(raw_result):
                  st.write("**Using the followowing query for mapping:**")
                  st.code(transformed_query, language="sql")
                  st.write("**Map View:**")
-                 display_map(transformed_query) # Use transformed query for map
+                 display_map(transformed_query)
              else:
                  pass
          else:
@@ -276,9 +275,7 @@ def transform_aggregate_query(sql_query):
          where_match = re.search(r'(WHERE\s+.+?)(?:ORDER BY|GROUP BY|LIMIT|;|$)', clean_query, re.IGNORECASE | re.DOTALL)
          if where_match:
              where_part = ' ' + where_match.group(1)
-
-         # Construct the new query. Ensure table_name is clean of any trailing garbage.
-         clean_table_name = re.sub(r'[^a-zA-Z0-9_"]+$', '', table_name) # Rudimentary cleaning of table name
+         clean_table_name = re.sub(r'[^a-zA-Z0-9_"]+$', '', table_name)
          new_query = f"SELECT *, COUNT(*) OVER() as total_count FROM {clean_table_name}{where_part}"
          return new_query
 
