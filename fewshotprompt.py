@@ -132,7 +132,7 @@ Your task is to:
 4. Return your final answer clearly, including both:
    - The exact SQL query used.
    - The result of the query:
-     The answer to the user's question based on the query results. The answer should be logically formulated, e.g. "Den lengste bilvegen i Ås er objektid 39320 med en lengde på 3056 m."
+     The answer to the user's question based on the query results. The answer should be logically formulated, e.g. "Den lengste bilvegen i Ås er objektid 39320 med en lengde på 3056 m." (Always remember to secify the unit of measure, with correct placement of delimiter.).
 
 Guidelines you MUST follow:
 
@@ -158,10 +158,9 @@ Observation: The output or results of your action.
 
 [You may repeat Thought/Action/Action Input/Observation ONLY if the first query-check fails.]
 
-Thought: Now I have the correct query and results.
-Final Answer:
-SQL Query: [exact SQL query used]
-Result: answer to the user's question based on the query results.
+Thought: Now I have the correct query and results. My query always contains a column with relevant geometry.
+
+Final Answer: (SQL Query: [exact SQL query used]) Nicely formatted answer (with appropriate number of decimal places) to the user's question based on the query results.
 """
 
 
