@@ -31,7 +31,11 @@ WITH kommuner AS (
                     f.malemetode AS malemetode
 					
                 FROM 
-                    tur_og_friluftsruter.fotrute f AND administrative_enheter_kommuner k
+                    tur_og_friluftsruter.fotrute f
+                
+            SELECT
+                k.kommune_objid
+                k.kommunenavn 
 
                 GROUP BY 
 					f.objid,
@@ -47,7 +51,8 @@ WITH kommuner AS (
                     f.informasjon,
                     f.rutefolger,
                     f.malemetode
-					
+                    k.kommunenavn
+
             )
             SELECT 
 					f.objid,
@@ -64,13 +69,12 @@ WITH kommuner AS (
 					f.informasjon,
 					f.rutefolger,
 					f.malemetode
-                    
 
 
             FROM 
-                fotrute f
+                fotrute f 
             JOIN 
-                kommuner k AND kommunenavn a
+                kommuner k
             ON 
                 ST_Intersects(f.geom, k.geom)
             WHERE 
