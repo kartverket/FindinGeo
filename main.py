@@ -22,9 +22,9 @@ def main():
     db = connect_to_db()
     llm = ChatGroq(
         api_key=os.getenv("API_KEY_GROQ"),
-        model="gemma2-9b-it",
+        model="gemma2-9b-it", # gemma2-9b-it
         temperature=0.0,
-        max_tokens=512       
+        max_tokens=1024       
     )
     
     # LangSmith tracer for debugging/monitoring

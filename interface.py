@@ -279,39 +279,6 @@ def transform_aggregate_query(sql_query):
          new_query = f"SELECT *, COUNT(*) OVER() as total_count FROM {clean_table_name}{where_part}"
          return new_query
 
-    # Case 2: Handle MIN() or MAX() queries without GROUP BY
-    min_max_match = re.search(r'SELECT\s+(MIN|MAX)\(([^)]+)\)\s+FROM\s+([^\s;]+)', clean_query, re.IGNORECASE)
-    if min_max_match and not re.search(r'GROUP BY', clean_query, re.IGNORECASE):
-        agg_func = min_max_match.group(1).upper()
-        agg_col = min_max_match.group(2).strip()
-        table_name = min_max_match.group(3)
-
-        if agg_func in ('MIN', 'MAX'):
-            where_part = ''
-            where_match = re.search(r'(WHERE\s+.+?)(?:ORDER BY|GROUP BY|LIMIT|;|$)', clean_query, re.IGNORECASE | re.DOTALL)
-            if where_match:
-                 where_part = ' ' + where_match.group(1)
-
-            clean_table_name = re.sub(r'[^a-zA-Z0-9_"]+$', '', table_name)
-
-            cte_query = f"""
-             WITH agg_value AS (
-                 SELECT {agg_func}({agg_col}) as target_value FROM {clean_table_name}
-                 {where_part}
-             )
-             SELECT t.*, '{agg_func}({agg_col})' as aggregation_type, av.target_value as aggregation_value
-             FROM {clean_table_name} t, agg_value av
-             WHERE t.{agg_col} = av.target_value
-             """
-            if not re.search(r'LIMIT', cte_query, re.IGNORECASE):
-                 cte_query += " LIMIT 10"
-
-            return cte_query
-
-    # Case 3: Complex aggregation queries (GROUP BY or AVG/SUM)
-    if re.search(r'GROUP BY', clean_query, re.IGNORECASE) or re.search(r'(AVG|SUM)\(', clean_query, re.IGNORECASE):
-         return None
-
     return None
 
 
@@ -374,7 +341,7 @@ def display_map(query_string):
         try:
              centroid = valid_geoms.unary_union.centroid
              map_location = [centroid.y, centroid.x]
-             initial_zoom = 12
+             initial_zoom = 10
         except Exception as e:
              st.warning(f"Could not calculate centroid for map centering. Using a default location. Error: {e}")
              map_location = [59.66, 10.76]

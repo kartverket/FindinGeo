@@ -3,7 +3,7 @@ import base64
 import streamlit as st
 
 
-def display_logo_title(image_path='logo.png', title_text="FindinGeo 👀", image_height_em=1.2):
+def display_logo_title(image_path='logo.png', title_text="FindinGeo", image_height_em=1.2):
     """
     Displays a logo image inline with a title using st.markdown and Base64 encoding.
     Falls back to a simple st.title if the image file is not found or encoding fails.
@@ -28,7 +28,7 @@ def display_logo_title(image_path='logo.png', title_text="FindinGeo 👀", image
         # Construct the HTML string
         html_title = f"""
         <h1>
-            <img src="{image_base64_url}" style="height: {image_height_em}em; vertical-align: middle;"> FindinGeo 👀
+            <img src="{image_base64_url}" style="height: {image_height_em}em; vertical-align: middle;"> FindinGeo
         </h1>
         """
 
